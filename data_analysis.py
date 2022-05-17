@@ -20,9 +20,12 @@ class Analysis(DataFrame):
             super().__init__(df)
         elif isinstance(df, Path):
             super().__init__(self.read(df))
+        else:
+            raise TypeError('init parameter must either be a dataframe or a path to a saved dataframe')
 
     # read from previous write()
-    def read(self, path: Path, inplace=False):
+    @staticmethod
+    def read(path: Path):
         match path.suffix:
             case '.csv':
                 out = read_csv(path, index_col=None)
@@ -38,8 +41,6 @@ class Analysis(DataFrame):
                 out = read_feather(path).reset_index()
             case _:
                 raise ValueError(f'{path.suffix} is not supported. Try .csv, .xlsx, .pkl, .parquet, or .fea / .feather')
-        if inplace:
-            self.loc[:, :] = out
         return out
 
     # save self to reference later
@@ -153,9 +154,9 @@ class Analysis(DataFrame):
         # apply transforms
         out = DataFrame({
             'fn_x': self.apply(lambda x: x_transform(x[voltage_name]), axis=1),
-            'fn_x SD': self.apply(lambda x: x_sd(x[voltage_name], x[f'{voltage_name} sd']), axis=1),
+            'fn_x sd': self.apply(lambda x: x_sd(x[voltage_name], x[f'{voltage_name} sd']), axis=1),
             'fn_y': self.apply(lambda x: y_transform(x[voltage_name], x[current_name]), axis=1),
-            'fn_y SD': self.apply(lambda x: y_sd(x[current_name], x[f'{current_name} sd'], x[voltage_name], x[f'{voltage_name} sd']), axis=1)
+            'fn_y sd': self.apply(lambda x: y_sd(x[current_name], x[f'{current_name} sd'], x[voltage_name], x[f'{voltage_name} sd']), axis=1)
         })
         if 'secondary voltage' in self:
             out['secondary voltage'] = self['secondary voltage']
