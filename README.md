@@ -1,5 +1,5 @@
-# UW-Platteville-Nanolab-Keithley
-Code for the Keithley meters in the Nano lab at the University of Wisconsin - Platteville.
+# Nanolab-Keithley
+Code for the Keithleys in the Nanolab
 
 # devices.py
 Contains all source meter objects. Contains all properties for Keithley2400 and Keithly6485
@@ -24,7 +24,7 @@ Configures source meter
 - frequency: pitch of beep
 - time: duration of beep
 ### measure
-Fills buffer with voltage and current measurements. Returns mean and sdev of both in a dictionary
+Fills buffer with voltage and current measurements. Returns mean and sd of both in a dictionary
 
 # procedures.py
 Contains all code for collecting data
