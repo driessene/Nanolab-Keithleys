@@ -110,6 +110,8 @@ output dataframe to a file for future reference
     - pkl: generally good, but bigger than feather. Only readable by python
     - parquet: Excellent for archiving
     - feather: Excellent for caching
+### voltage_index
+moves voltage values to the index. Not used for analysis, but good to use when exporting data for readability. Read can use voltage indexes or incremental indexes.
 ### zero
 set voltage at zero to have a current of zero. Changes all current data by the offset
     - inplace: if true, replaces dataframe as the output of the function. Default is false

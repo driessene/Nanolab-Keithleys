@@ -45,26 +45,28 @@ class Analysis(DataFrame):
 
     # save self to reference later
     def write(self, path: Path):
-        if 'secondary voltage' in self:
-            out = self.set_index(['voltage', 'secondary voltage'])
-        else:
-            out = self.set_index('voltage')
+
         match path.suffix:
             case '.csv':
-                out.to_csv(path)
+                self.voltage_index().to_csv(path)
             case '.xlsx':
-                out.to_excel(path)
+                self.voltage_index().to_excel(path)
             case '.pkl':
-                out.to_pickle(path)
+                self.voltage_index().to_pickle(path)
             case '.parquet':
-                out.to_parquet(path)
+                self.voltage_index().to_parquet(path)
             case '.fea' | '.feather':
-                out.reset_index().to_feather(path)
+                self.voltage_index().reset_index().to_feather(path)
             case _:
                 raise ValueError(f'{path.suffix} is not supported. Try .csv, .xlsx, .pkl, .parquet, or .fea / .feather')
 
-    def zero(self, inplace=False):
+    def voltage_index(self):
+        if 'secondary voltage' in self:
+            return self.set_index(['voltage', 'secondary voltage'])
+        else:
+            return self.set_index('voltage')
 
+    def zero(self, inplace=False):
         def find_zero(df):
             volt = df['voltage']
             pv = volt[volt <= 0]
